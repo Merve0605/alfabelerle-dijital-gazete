@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dijital Alfabe Gazetesi</title>
+    <!-- Tailwind CSS ve Google Fonts linkleri -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Noto+Serif+Hebrew:wght@400;700&family=Noto+Serif+KR:wght@400;700&family=Noto+Naskh+Arabic:wght@400;700&family=Noto+Serif+Devanagari:wght@400;700&family=Roboto+Serif:wght@400;700&family=Noto+Serif+Georgian:wght@400;700&family=Noto+Serif+Thai:wght@400;700&family=Montserrat:wght@400;700&family=Noto+Sans:wght@400;700&family=Noto+Sans+JP:wght@400;700&family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Genel gazete stili için özel CSS */
+        body {
+            font-family: 'Merriweather', serif;
+            background-color: #f0f0e8;
+            line-height: 1.6;
+            transition: font-family 0.3s ease;
+        }
+        .newspaper-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: #fff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            border: 1px solid #ddd;
+        }
+        .newspaper-header {
+            border-bottom: 2px solid #333;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .newspaper-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+        .newspaper-subtitle {
+            font-size: 1.125rem;
+            color: #555;
+            font-style: italic;
+        }
+        .article-card {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #e5e7eb;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            break-inside: avoid-column;
+            margin-bottom: 2rem;
+        }
+        .article-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+        .article-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        .article-content {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+        /* İçerik için sütunlu gazete görünümü */
+        .newspaper-content {
+            column-count: 1;
+            column-gap: 2rem;
+        }
+        @media (min-width: 768px) {
+            .newspaper-content {
+                column-count: 2;
+            }
+        }
+        @media (min-width: 1024px) {
+            .newspaper-content {
+                column-count: 3;
+            }
+        }
+        /* Gazete başlığı ve sıfırlama butonu için esnek düzen */
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .alphabet-nav {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 2px solid #ddd;
+        }
+        .alphabet-nav-item {
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            margin: 0.5rem;
+            background-color: #e5e7eb;
+            color: #333;
+            border-radius: 9999px;
+            font-weight: 600;
+            transition: background-color 0.2s ease;
+            white-space: nowrap;
+        }
+        .alphabet-nav-item:hover {
+            background-color: #d1d5db;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+<div class="newspaper-container">
+    <header class="newspaper-header">
+        <div class="header-content">
+            <h1 class="newspaper-title" id="newspaper-title">Dijital Alfabe Gazetesi</h1>
+            <button id="reset-font-btn" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded-full shadow transition-colors">
+                Türkçe'ye Dön
+            </button>
+        </div>
+        <p class="newspaper-subtitle text-right">Dünyanın Dilleri ve Yazı Sistemleri</p>
+    </header>
+
+    <main class="newspaper-content" id="main-content">
+        <!-- Makaleler JavaScript ile buraya eklenecek -->
+    </main>
+    
+    <div class="my-8">
+        <h2 class="text-2xl font-bold text-center text-gray-800 mb-4" id="story-section-title">Senin Hikayeni Paylaş</h2>
+        <div class="bg-gray-50 p-6 rounded-lg shadow-sm">
+            <p class="text-sm text-gray-500 mb-4" id="story-section-description">Yaşadığın ilginç bir olayı, bir düşünceni veya bir hikayeni burada paylaşabilirsin. Senin hikayen de gazetenin bir parçası olacak!</p>
+            <form id="story-form" class="space-y-4">
+                <input type="text" id="story-author" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Adınız (isteğe bağlı)">
+                <textarea id="story-content" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" rows="5" placeholder="Hikayeni buraya yaz..." required></textarea>
+                <button type="submit" id="submit-button" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md transition-colors shadow">Hikayemi Gönder</button>
+            </form>
+        </div>
+    </div>
+
+    <nav class="alphabet-nav">
+        <!-- Alfabe butonları JavaScript ile buraya eklenecek -->
+    </nav>
+
+    <footer class="text-center text-sm text-gray-500 mt-8 pt-4 border-t border-gray-300">
+        <p>&copy; 2024 Dijital Gazete. Tüm Hakları Saklıdır.</p>
+    </footer>
+</div>
+
+<script>
+    // Tüm makale içerikleri farklı dillerde
+    const content = {
+        'tr': [
+            { id: 'article-1', title: "Yazı Sistemlerinin Evrimi: İnsanlığın Ortak Mirası", content: "İlkçağlardan günümüze kadar, yazı sistemleri insanlık tarihinin en önemli buluşlarından biri olmuştur. Sümerlerin çivi yazısından, Mısırlıların hiyerogliflerine, Fenikelilerin ilk alfabesinden modern yazı sistemlerine kadar her evre, bilginin birikimi ve nesiller arası aktarımı için hayati bir rol oynamıştır. Yazının icadı, yalnızca kültürel ve bilimsel gelişmeleri hızlandırmakla kalmamış, aynı zamanda toplumların örgütlenme biçimlerini de derinden etkilemiştir. Bugün kullandığımız her harf, binlerce yıllık bir evrimin sonucudur." },
+            { id: 'article-2', title: "Şampiyonlar Ligi'nde Büyük Sürpriz: Alt Yapı Takımı Zirveye Yürüyor!", content: "Futbol dünyasında beklenmedik bir gelişme yaşandı. Alt liglerden gelen genç bir takım, Şampiyonlar Ligi'nde fırtına gibi esmeye devam ediyor. Savunmadaki disiplinleri ve hücumdaki yaratıcılıklarıyla tüm otoriteleri şaşırtan bu takım, çeyrek finale yükselerek turnuvanın en büyük sürprizi oldu. Teknik direktörleri, başarılarının sırrını takım ruhu ve sıkı çalışmaya bağlıyor." },
+            { id: 'article-3', title: "Tarihi İpek Yolu Festivali Başladı", content: "Antik İpek Yolu güzergahında yer alan şehirlerde, kültürleri bir araya getiren bir festival düzenleniyor. 'Kültürlerin Kesişimi' temasıyla düzenlenen festivalde, geleneksel müzik konserleri, dans gösterileri, el sanatları atölyeleri ve gastronomi etkinlikleri ziyaretçileri ağırlıyor. Festival, farklı medeniyetler arasında köprü kurmayı hedefliyor." },
+            { id: 'article-4', title: "Küresel Liderler, Gıda Güvenliği Zirvesi İçin Bir Araya Geldi", content: "Dünyanın dört bir yanından liderler, artan gıda krizi ve sürdürülebilir tarım konularını görüşmek üzere bir zirvede buluştu. Toplantının ana gündem maddeleri arasında, iklim değişikliğinin tarıma etkileri, tedarik zinciri sorunları ve yoksul bölgelerde gıda erişimini artırmak yer alıyor. Ortak bir çözüm haritası oluşturulması bekleniyor." },
+            { id: 'article-5', title: "Son İklim Raporu Endişe Verici Senaryoları Ortaya Koydu", content: "Uluslararası bir bilimsel kuruluş tarafından yayımlanan son iklim raporu, küresel ısınmanın beklenenden daha hızlı ilerlediğini gösteriyor. Raporda, buzulların erime hızındaki artış ve ekstrem hava olaylarının sıklığına dikkat çekilerek, acil önlemler alınmadığı takdirde gezegenimiz için geri dönülmez zararların ortaya çıkabileceği belirtiliyor." },
+            { id: 'article-6', title: "Sıcak Hava Dalgası, Bölgede Yeni Rekorlar Kırdı", content: "Bölgeyi etkisi altına alan sıcak hava dalgası, son 50 yılın en yüksek sıcaklık rekorunu kırdı. Yetkililer, özellikle yaşlı, çocuk ve kronik hastalığı olan vatandaşları günün en sıcak saatlerinde dışarı çıkmamaları konusunda uyardı. Orman yangınları ve tarım ürünlerinin verimindeki düşüşler de sıcaklığın olumsuz etkileri arasında yer alıyor." },
+            { id: 'article-7', title: "Bilim İnsanlarından Aşı Geliştirmesinde Önemli Adım", content: "Tıp dünyasından heyecanlandıran bir haber geldi. Bir grup araştırmacı, nadir görülen bir hastalığa karşı geliştirilen aşı prototipinde olumlu sonuçlar elde etti. Klinik test aşamasında olan bu yeni aşı, hastalığın yayılmasını önlemede ve bağışıklık sistemini güçlendirmede büyük umut vaat ediyor." },
+            { id: 'article-8', title: "Unutulmaya Yüz Tutan Zanaatlar Yeniden Canlanıyor", content: "Günümüz teknolojisi karşısında zor durumda kalan geleneksel zanaatlar, genç ustaların çabalarıyla yeniden hayat buluyor. Dokumacılık, seramik yapımı ve ahşap oymacılığı gibi zanaatlar, düzenlenen atölyeler ve kurslar sayesinde yeni nesillere aktarılıyor. Bu çabalar, kültürel mirasın korunmasına önemli katkılar sunuyor." },
+        ],
+        'el': [
+            { id: 'article-1', title: "Η Εξέλιξη των Συστημάτων Γραφής: Κοινή Κληρονομιά της Ανθρωπότητας", content: "Από τους αρχαίους χρόνους μέχρι σήμερα, τα συστήματα γραφής υπήρξαν μια από τις σημαντικότερες εφευρέσεις της ανθρώπινης ιστορίας. Από τη σφηνοειδή γραφή των Σουμερίων, μέχρι τα ιερογλυφικά των Αιγυπτίων, από το πρώτο αλφάβητο των Φοινίκων έως τα σύγχρονα συστήματα γραφής, κάθε στάδιο έπαιξε ζωτικό ρόλο στη συσσώρευση γνώσης και τη μετάδοση της από γενιά σε γενιά. Η εφεύρεση της γραφής όχι μόνο επιτάχυνε την πολιτιστική και επιστημονική ανάπτυξη, αλλά επηρέασε βαθιά και τους τρόπους οργάνωσης των κοινωνιών. Κάθε γράμμα που χρησιμοποιούμε σήμερα είναι το αποτέλεσμα μιας εξέλιξης χιλιάδων ετών." },
+            { id: 'article-2', title: "Μεγάλη Έκπληξη στο Champions League: Η Νεανική Ομάδα στην Κορυφή!", content: "Μια απροσδόκητη εξέλιξη σημειώθηκε στον κόσμο του ποδοσφαίρου. Μια νεανική ομάδα που προέρχεται από χαμηλότερες κατηγορίες συνεχίζει να εντυπωσιάζει στο Champions League. Με την πειθαρχία τους στην άμυνα και τη δημιουργικότητά τους στην επίθεση, η ομάδα αυτή εξέπληξε όλους τους ειδικούς και έφτασε στα προημιτελικά, αποτελώντας τη μεγαλύτερη έκπληξη του τουρνουά. Ο προπονητής τους αποδίδει την επιτυχία τους στο ομαδικό πνεύμα και τη σκληρή δουλειά." },
+            { id: 'article-3', title: "Το Ιστορικό Φεστιβάλ του Δρόμου του Μεταξιού Ξεκίνησε", content: "Ένα φεστιβάλ που ενώνει τους πολιτισμούς διοργανώνεται σε πόλεις που βρίσκονται κατά μήκος της αρχαίας διαδρομής του Δρόμου του Μεταξιού. Με θέμα 'Η Διασταύρωση των Πολιτισμών', το φεστιβάλ υποδέχεται επισκέπτες με παραδοσιακές συναυλίες, χορευτικές παραστάσεις, εργαστήρια χειροτεχνίας και γαστρονομικές εκδηλώσεις. Στόχος του φεστιβάλ είναι η δημιουργία γεφυρών μεταξύ διαφορετικών πολιτισμών." },
+            { id: 'article-4', title: "Παγκόσμιοι Ηγέτες Συγκεντρώνονται για τη Σύνοδο Κορυφής για την Επισιτιστική Ασφάλεια", content: "Ηγέτες από όλο τον κόσμο συναντήθηκαν σε μια σύνοδο κορυφής για να συζητήσουν την αυξανόμενη επισιτιστική κρίση και τη βιώσιμη γεωργία. Τα κύρια θέματα της ατζέντας περιλαμβάνουν τις επιπτώσεις της κλιματικής αλλαγής στη γεωργία, τα προβλήματα της εφοδιαστικής αλυσίδας και τη βελτίωση της πρόσβασης σε τρόφιμα σε φτωχές περιοχές. Αναμένεται να δημιουργηθεί ένας κοινός οδικός χάρτης για την επίλυση αυτών των ζητημάτων." },
+            { id: 'article-5', title: "Η Τελευταία Έκθεση για το Κλίμα Αποκαλύπτει Ανησυχητικά Σενάρια", content: "Η τελευταία έκθεση για το κλίμα που δημοσιεύτηκε από έναν διεθνή επιστημονικό οργανισμό δείχνει ότι η υπερθέρμανση του πλανήτη προχωρά πιο γρήγορα από το αναμενόμενο. Η έκθεση επισημαίνει την αύξηση της ταχύτητας τήξης των παγετώνων και τη συχνότητα των ακραίων καιρικών φαινομένων, δηλώνοντας ότι μπορεί να προκληθεί μη αναστρέψιμη ζημιά στον πλανήτη εάν δεν ληφθούν άμεσα μέτρα." },
+            { id: 'article-6', title: "Το Κύμα Καύσωνα Κατέγραψε Νέα Ρεκόρ στην Περιοχή", content: "Το κύμα καύσωνα που επηρέασε την περιοχή κατέρριψε το ρεκόρ της υψηλότερης θερμοκρασίας των τελευταίων 50 ετών. Οι αρχές προειδοποίησαν τους πολίτες, ειδικά τους ηλικιωμένους, τα παιδιά και τους χρονίως πάσχοντες, να μην βγαίνουν έξω κατά τις πιο ζεστές ώρες της ημέρας. Ανάμεσα στις αρνητικές επιπτώσεις της ζέστης είναι οι δασικές πυρκαγιές και η μείωση της απόδοσης των γεωργικών προϊόντων." },
+            { id: 'article-7', title: "Σημαντικό Βήμα από Επιστήμονες στην Ανάπτυξη Εμβολίου", content: "Μια συναρπαστική είδηση ήρθε από τον κόσμο της ιατρικής. Μια ομάδα ερευνητών πέτυχε θετικά αποτελέσματα σε ένα πρωτότυπο εμβολίου που αναπτύχθηκε κατά μιας σπάνιας ασθένειας. Το νέο εμβόλιο, το οποίο βρίσκεται σε στάδιο κλινικών δοκιμών, δείχνει μεγάλη υπόσχεση για την πρόληψη της εξάπλωσης της ασθένειας και την ενίσχυση του ανοσοποιητικού συστήματος." },
+            { id: 'article-8', title: "Ξαναζωντανεύουν οι Εξαφανιζόμενες Τέχνες", content: "Οι παραδοσιακές τέχνες που αντιμετωπίζουν δυσκολίες απέναντι στη σύγχρονη τεχνολογία αναβιώνουν χάρη στις προσπάθειες νέων τεχνιτών. Τέχνες όπως η υφαντική, η κεραμική και η ξυλογλυπτική μεταδίδονται στις νέες γενιές μέσω εργαστηρίων και μαθημάτων. Αυτές οι προσπάθειες συμβάλλουν σημαντικά στη διατήρηση της πολιτιστικής κληρονομιάς." }
+        ],
+        'de': [
+            { id: 'article-1', title: "Die Evolution der Schriftsysteme: Ein gemeinsames Erbe der Menschheit", content: "Von der Antike bis heute sind Schriftsysteme eine der wichtigsten Erfindungen der Menschheitsgeschichte. Von der Keilschrift der Sumerer über die Hieroglyphen der Ägypter und das erste Alphabet der Phönizier bis hin zu den modernen Schriftsystemen spielte jede Phase eine entscheidende Rolle bei der Akkumulation und Übertragung von Wissen von Generation zu Generation. Die Erfindung der Schrift beschleunigte nicht nur die kulturelle und wissenschaftliche Entwicklung, sondern beeinflusste auch die Organisationsformen der Gesellschaften zutiefst. Jeder Buchstabe, den wir heute verwenden, ist das Ergebnis einer jahrtausendelangen Evolution." },
+            { id: 'article-2', title: "Große Überraschung in der Champions League: Ein U-Team marschiert an die Spitze!", content: "In der Welt des Fußballs gab es eine unerwartete Entwicklung. Ein junges Team aus den unteren Ligen sorgt in der Champions League weiterhin für Furore. Mit ihrer disziplinierten Verteidigung und kreativen Offensive überraschte das Team alle Experten und erreichte das Viertelfinale, was zur größten Überraschung des Turniers wurde. Ihr Trainer führt den Erfolg auf Teamgeist und harte Arbeit zurück." },
+            { id: 'article-3', title: "Historisches Seidenstraßen-Festival beginnt", content: "Ein Festival, das Kulturen zusammenbringt, wird in Städten entlang der antiken Seidenstraße-Route organisiert. Unter dem Motto 'Kreuzung der Kulturen' empfängt das Festival Besucher mit traditionellen Musikkonzerten, Tanzaufführungen, Handwerksworkshops und gastronomischen Veranstaltungen. Ziel des Festivals ist es, Brücken zwischen verschiedenen Zivilisationen zu bauen." },
+            { id: 'article-4', title: "Globale Führungskräfte treffen sich zum Gipfel für Ernährungssicherheit", content: "Führungskräfte aus der ganzen Welt kamen zu einem Gipfel zusammen, um die zunehmende Lebensmittelkrise und nachhaltige Landwirtschaft zu diskutieren. Zu den wichtigsten Tagesordnungspunkten gehören die Auswirkungen des Klimawandels auf die Landwirtschaft, Probleme in der Lieferkette und die Verbesserung des Zugangs zu Nahrungsmitteln in armen Regionen. Es wird erwartet, dass ein gemeinsamer Fahrplan zur Lösung dieser Probleme erstellt wird." },
+            { id: 'article-5', title: "Jüngster Klimabericht enthüllt besorgniserregende Szenarien", content: "Der jüngste Klimabericht, der von einer internationalen Wissenschaftsorganisation veröffentlicht wurde, zeigt, dass die globale Erwärmung schneller voranschreitet als erwartet. Der Bericht weist auf die erhöhte Geschwindigkeit der Gletscherschmelze und die Häufigkeit extremer Wetterereignisse hin und erklärt, dass irreparable Schäden am Planeten entstehen könnten, wenn nicht sofort Maßnahmen ergriffen werden." },
+            { id: 'article-6', title: "Hitzewelle bricht neue Rekorde in der Region", content: "Eine Hitzewelle, die die Region erfasste, hat den höchsten Temperaturrekord der letzten 50 Jahre gebrochen. Die Behörden warnten die Bürger, insbesondere ältere Menschen, Kinder und Menschen mit chronischen Krankheiten, während der heißesten Stunden des Tages nicht nach draußen zu gehen. Waldbrände und ein Rückgang der landwirtschaftlichen Erträge gehören ebenfalls zu den negativen Auswirkungen der Hitze." },
+            { id: 'article-7', title: "Wichtiger Schritt von Wissenschaftlern bei der Impfstoffentwicklung", content: "Spannende Neuigkeiten kommen aus der Welt der Medizin. Eine Gruppe von Forschern hat positive Ergebnisse mit einem Impfstoffprototypen erzielt, der gegen eine seltene Krankheit entwickelt wurde. Dieser neue Impfstoff, der sich in der Phase der klinischen Tests befindet, verspricht viel, die Ausbreitung der Krankheit zu verhindern und das Immunsystem zu stärken." },
+            { id: 'article-8', title: "Aussterbende Handwerke werden wiederbelebt", content: "Traditionelle Handwerke, die aufgrund der heutigen Technologie in Schwierigkeiten geraten sind, werden durch die Bemühungen junger Handwerker wieder zum Leben erweckt. Handwerke wie Weberei, Keramik und Holzschnitzerei werden durch Workshops und Kurse an neue Generationen weitergegeben. Diese Bemühungen leisten einen wichtigen Beitrag zur Erhaltung des kulturellen Erbes." }
+        ],
+        'fr': [
+            { id: 'article-1', title: "L'évolution des systèmes d'écriture : un héritage commun de l'humanité", content: "Des temps anciens à nos jours, les systèmes d'écriture ont été l'une des inventions les plus importantes de l'histoire de l'humanité. De l'écriture cunéiforme des Sumériens aux hiéroglyphes des Égyptiens, du premier alphabet des Phéniciens aux systèmes d'écriture modernes, chaque étape a joué un rôle vital dans l'accumulation et la transmission des connaissances de génération en génération. L'invention de l'écriture a non seulement accéléré le développement culturel et scientifique, mais a également profondément influencé les formes d'organisation des sociétés. Chaque lettre que nous utilisons aujourd'hui est le résultat d'une évolution millénaire." },
+            { id: 'article-2', title: "Grosse surprise en Ligue des Champions : Une équipe de jeunes monte au sommet !", content: "Un développement inattendu a eu lieu dans le monde du football. Une jeune équipe des ligues inférieures continue de faire sensation en Ligue des Champions. Avec leur défense disciplinée et leur créativité en attaque, cette équipe a surpris toutes les autorités et a atteint les quarts de finale, devenant la plus grande surprise du tournoi. Leur entraîneur attribue leur succès à l'esprit d'équipe et au travail acharné." },
+            { id: 'article-3', title: "Début du Festival Historique de la Route de la Soie", content: "Un festival qui rassemble les cultures est organisé dans les villes situées le long de l'ancienne Route de la Soie. Sous le thème 'Carrefour des Cultures', le festival accueille les visiteurs avec des concerts de musique traditionnelle, des spectacles de danse, des ateliers d'artisanat et des événements gastronomiques. Le festival vise à construire des ponts entre différentes civilisations." },
+            { id: 'article-4', title: "Les dirigeants mondiaux se réunissent pour le Sommet sur la sécurité alimentaire", content: "Des dirigeants du monde entier se sont réunis lors d'un sommet pour discuter de la crise alimentaire croissante et de l'agriculture durable. Les principaux points de l'ordre du jour comprennent les impacts du changement climatique sur l'agriculture, les problèmes de la chaîne d'approvisionnement et l'amélioration de l'accès à la nourriture dans les régions pauvres. On s'attend à ce qu'une feuille de route commune soit créée pour résoudre ces problèmes." },
+            { id: 'article-5', title: "Le dernier rapport sur le climat révèle des scénarios préoccupants", content: "Le dernier rapport sur le climat, publié par une organisation scientifique internationale, montre que le réchauffement climatique progresse plus rapidement que prévu. Le rapport attire l'attention sur l'augmentation de la vitesse de la fonte des glaciers et la fréquence des événements météorologiques extrêmes, déclarant que des dommages irréversibles pourraient se produire sur la planète si des mesures urgentes ne sont pas prises." },
+            { id: 'article-6', title: "La canicule bat de nouveaux records dans la région", content: "Une canicule qui a balayé la région a battu le record de la plus haute température des 50 dernières années. Les autorités ont averti les citoyens, en particulier les personnes âgées, les enfants et les personnes atteintes de maladies chroniques, de ne pas sortir pendant les heures les plus chaudes de la journée. Les incendies de forêt et la baisse du rendement des produits agricoles font également partie des effets négatifs de la chaleur." },
+            { id: 'article-7', title: "Étape importante des scientifiques dans le développement d'un vaccin", content: "Une nouvelle passionnante est venue du monde de la médecine. Un groupe de chercheurs a obtenu des résultats positifs sur un prototype de vaccin développé contre une maladie rare. Ce nouveau vaccin, qui est en phase d'essais cliniques, est très prometteur pour prévenir la propagation de la maladie et renforcer le système immunitaire." },
+            { id: 'article-8', title: "L'artisanat en voie de disparition renaît", content: "Les métiers traditionnels qui ont du mal à survivre face à la technologie d'aujourd'hui reprennent vie grâce aux efforts des jeunes artisans. Des métiers comme le tissage, la poterie et la sculpture sur bois sont transmis aux nouvelles générations à travers des ateliers et des cours. Ces efforts apportent une contribution importante à la préservation du patrimoine culturel." }
+        ],
+        'he': [
+            { id: 'article-1', title: "התפתחות מערכות הכתב: מורשת משותפת של האנושות", content: "מהעת העתיקה ועד היום, מערכות הכתב היו אחת ההמצאות החשובות ביותר בהיסטוריה האנושית. מכתב היתדות של השומרים ועד ההירוגליפים של המצרים, מהאלפבית הראשון של הפיניקים ועד למערכות הכתב המודרניות, כל שלב מילא תפקיד חיוני בצבירה ובהעברת ידע מדור לדור. המצאת הכתב לא רק האיצה את ההתפתחות התרבותית והמדעית, אלא גם השפיעה עמוקות על צורות הארגון של החברות. כל אות שאנו משתמשים בה היום היא תוצאה של אלפי שנות אבולוציה." },
+            { id: 'article-2', title: "הפתעה גדולה בליגת האלופות: קבוצת נוער צועדת לפסגה!", content: "התפתחות בלתי צפויה התרחשה בעולם הכדורגל. קבוצה צעירה מליגות נמוכות ממשיכה לעורר סערה בליגת האלופות. עם הגנה ממושמעת ויצירתיות בהתקפה, הקבוצה הזו הפתיעה את כל המומחים והגיעה לרבע הגמר, והפכה להפתעה הגדולה ביותר של הטורניר. המאמן שלהם מייחס את הצלחתם לרוח צוות ולעבודה קשה." },
+            { id: 'article-3', title: "פסטיבל דרך המשי ההיסטורית החל", content: "פסטיבל המאחד תרבויות מתקיים בערים הממוקמות לאורך נתיב דרך המשי העתיקה. תחת הנושא 'צומת תרבויות', הפסטיבל מקבל את פני המבקרים בקונצרטים של מוזיקה מסורתית, מופעי ריקוד, סדנאות אומנות ואירועי גסטרונומיה. מטרת הפסטיבל היא לבנות גשרים בין תרבויות שונות." },
+            { id: 'article-4', title: "מנהיגים גלובליים מתכנסים לפסגת ביטחון המזון", content: "מנהיגים מכל רחבי העולם התכנסו לפסגה כדי לדון במשבר המזון הגובר ובתחום החקלאות בת קיימא. הנושאים העיקריים על סדר היום כוללים את השפעות שינויי האקלים על החקלאות, בעיות בשרשרת האספקה ושיפור הגישה למזון באזורים עניים. צפוי שייווצר מפת דרכים משותפת לפתרון בעיות אלה." },
+            { id: 'article-5', title: "דוח האקלים האחרון חושף תרחישים מדאיגים", content: "דוח האקלים האחרון שפורסם על ידי ארגון מדעי בינלאומי מראה כי ההתחממות הגלובלית מתקדמת מהר מהצפוי. הדוח מציין את העלייה בקצב המסת הקרחונים ואת התדירות של אירועי מזג אוויר קיצוניים, ומצהיר כי נזק בלתי הפיך עלול להיגרם לכדור הארץ אם לא יינקטו צעדים מיידיים." },
+            { id: 'article-6', title: "גל חום שובר שיאים חדשים באזור", content: "גל חום שפקד את האזור שבר את שיא הטמפרטורה הגבוהה ביותר ב-50 השנים האחרונות. הרשויות הזהירו את האזרחים, במיוחד את הקשישים, הילדים ואלו עם מחלות כרוניות, לא לצאת החוצה בשעות החמות ביותר של היום. שריפות יער וירידה בתפוקת היבולים החקלאיים הם גם בין ההשפעות השליליות של החום." },
+            { id: 'article-7', title: "צעד חשוב של מדענים בפיתוח חיסון", content: "חדשות מרגשות הגיעו מעולם הרפואה. קבוצת חוקרים השיגה תוצאות חיוביות באב-טיפוס של חיסון שפותח נגד מחלה נדירה. החיסון החדש, שנמצא בשלב של ניסויים קליניים, מבטיח רבות במניעת התפשטות המחלה וחיזוק המערכת החיסונית." },
+            { id: 'article-8', title: "אומנויות נעלמות חוזרות לחיים", content: "אומנויות מסורתיות שמתקשות מול הטכנולוגיה של היום חוזרות לחיים בזכות מאמציהם של אמנים צעירים. אומנויות כמו אריגה, קרמיקה וגילוף בעץ מועברות לדורות החדשים באמצעות סדנאות וקורסים. מאמצים אלה תורמים תרומה חשובה לשימור המורשת התרבותית." }
+        ],
+        'ar': [
+            { id: 'article-1', title: "تطور أنظمة الكتابة: إرث مشترك للإنسانية", content: "منذ العصور القديمة وحتى اليوم، كانت أنظمة الكتابة واحدة من أهم اختراعات تاريخ البشرية. من الكتابة المسمارية للسومريين إلى الهيروغليفية للمصريين، ومن الأبجدية الأولى للفينيقيين إلى أنظمة الكتابة الحديثة، لعبت كل مرحلة دورًا حيويًا في تراكم المعرفة ونقلها من جيل إلى جيل. لم يسرع اختراع الكتابة التطور الثقافي والعلمي فحسب، بل أثر أيضًا بعمق على أشكال تنظيم المجتمعات. كل حرف نستخدمه اليوم هو نتيجة تطور لآلاف السنين." },
+            { id: 'article-2', title: "مفاجأة كبيرة في دوري الأبطال: فريق شبابي يتجه نحو القمة!", content: "حدث تطور غير متوقع في عالم كرة القدم. فريق شبابي قادم من دوريات أدنى يواصل إثارة الإعجاب في دوري أبطال أوروبا. بفضل دفاعهم المنضبط وإبداعهم في الهجوم، فاجأ هذا الفريق جميع الخبراء ووصل إلى ربع النهائي، ليصبح أكبر مفاجأة في البطولة. يعزو مدربهم نجاحهم إلى روح الفريق والعمل الجاد." },
+            { id: 'article-3', title: "بدء مهرجان طريق الحرير التاريخي", content: "يقام مهرجان يجمع الثقافات في المدن الواقعة على طول طريق الحرير القديم. تحت شعار 'ملتقى الثقافات'، يستقبل المهرجان الزوار بحفلات موسيقية تقليدية، وعروض رقص، وورش عمل للحرف اليدوية، وفعاليات تذوق الطعام. يهدف المهرجان إلى بناء جسور بين الحضارات المختلفة." },
+            { id: 'article-4', title: "القادة العالميون يجتمعون لقمة الأمن الغذائي", content: "اجتمع قادة من جميع أنحاء العالم في قمة لمناقشة أزمة الغذاء المتزايدة والزراعة المستدامة. تشمل النقاط الرئيسية على جدول الأعمال آثار تغير المناخ على الزراعة، ومشاكل سلسلة التوريد، وتحسين الوصول إلى الغذاء في المناطق الفقيرة. ومن المتوقع أن يتم وضع خارطة طريق مشتركة لحل هذه المشاكل." },
+            { id: 'article-5', title: "آخر تقرير عن المناخ يكشف عن سيناريوهات مقلقة", content: "يكشف أحدث تقرير عن المناخ، الذي نشرته منظمة علمية دولية، أن الاحترار العالمي يتقدم بشكل أسرع مما كان متوقعًا. يشير التقرير إلى زيادة سرعة ذوبان الأنهار الجليدية وتكرار الظواهر الجوية المتطرفة، ويذكر أن أضرارًا لا رجعة فيها قد تحدث للكوكب إذا لم يتم اتخاذ إجراءات فورية." },
+            { id: 'article-6', title: "موجة حر تسجل أرقامًا قياسية جديدة في المنطقة", content: "سجلت موجة حر ضربت المنطقة أعلى درجة حرارة في آخر 50 عامًا. حذرت السلطات المواطنين، وخاصة كبار السن والأطفال والمصابين بأمراض مزمنة، من الخروج خلال أشد ساعات اليوم حرارة. وتعتبر حرائق الغابات وانخفاض إنتاج المحاصيل الزراعية أيضًا من الآثار السلبية للحرارة." },
+            { id: 'article-7', title: "خطوة مهمة من العلماء في تطوير لقاح", content: "جاءت أخبار مثيرة من عالم الطب. حقق فريق من الباحثين نتائج إيجابية في نموذج أولي للقاح تم تطويره ضد مرض نادر. هذا اللقاح الجديد، الذي يخضع حاليًا لتجارب سريرية، يحمل وعودًا كبيرة في منع انتشار المرض وتعزيز الجهاز المناعي." },
+            { id: 'article-8', title: "الحرف اليدوية المهددة بالانقراض تعود إلى الحياة", content: "تعود الحرف اليدوية التقليدية، التي تواجه صعوبات أمام التكنولوجيا الحديثة، إلى الحياة بفضل جهود الحرفيين الشباب. يتم نقل حرف مثل النسيج والفخار ونحت الخشب إلى الأجيال الجديدة من خلال ورش العمل والدورات التدريبية. وتساهم هذه الجهود بشكل كبير في الحفاظ على التراث الثقافي." }
+        ],
+        'ku': [
+            { id: 'article-1', title: "Pêşveçûna Pergalên Nivîsê: Mîrasek Hevpar a Mirovahiyê", content: "Ji demên kevnar heta îro, pergalên nivîsê yek ji girîngtirîn îcadên dîroka mirovahiyê ne. Ji nivîsa tîpên bizmarî ya Sumeriyan heta hiyeroglîfên Misriyan, ji yekem alfabeya Fînîkî heta pergalên nivîsê yên modern, her qonaxek di berhevkirin û veguhestina zanînê de ji nifş bo nifş rolek girîng lîstiye. Vedîtina nivîsê ne tenê pêşveçûna çandî û zanistî lez kir, di heman demê de bandorek kûr li ser awayên rêxistinbûna civakan jî kir. Her tîpek ku em îro bikar tînin, encama pêşveçûnek bi hezaran salan e." },
+            { id: 'article-2', title: "Surprîzek Mezin di Lîga Şampiyonan de: Tîmek Ciwanan ber bi Serê Çiyê ve diçe!", content: "Pêşveçûnek nediyar di cîhana futbolê de çêbû. Tîmek ciwan a ji lîgên jêrîn di Lîga Şampiyonan de serfiraziyên xwe didomîne. Bi parastina xwe ya bi dîsîplîn û afirîneriya xwe di êrîşê de, ev tîm hemû otorîteyan şaş kir û gihîşt çaryek fînalê, bû surprîza herî mezin a tûrnûvayê. Rahênerê wan, serkeftina wan bi ruhê tîmê û xebata dijwar ve girê dide." },
+            { id: 'article-3', title: "Destpêka Festîvala Rêya Hevrîşimê ya Dîrokî", content: "Li bajarên ku li ser Rêya Hevrîşimê ya kevnar in, festîvalek ku çandan li hev dicivîne, tê organîzekirin. Bi dirûşma 'Cihê Hevdîtina Çandan', festîval bi konserên muzîka kevneşopî, pêşandanên dansê, atolyeyên hunerên destan û bûyerên gastronomîk pêşwaziya mêvanan dike. Armanca festîvalê avakirina piran di navbera çandên cihê de ye." },
+            { id: 'article-4', title: "Rêberên Cîhanê ji bo Lûtkeya Ewlehiya Xwarinê Li Hev Civiyan", content: "Rêberên ji çar aliyên cîhanê ji bo lûtkeyekê li hev civiyan da ku li ser krîza xwarinê ya zêde dibe û çandiniya domdar biaxifin. Mijarên sereke yên rojevê bandorên guherîna avhewa li ser çandiniyê, pirsgirêkên zincîra peydakirina xwarinê û baştirkirina gihîştina xwarinê li herêmên xizan in. Tê payîn ku ji bo çareserkirina van pirsgirêman nexşerêyek hevpar were amadekirin." },
+            { id: 'article-5', title: "Rapora Dawî ya Avhewayê Senaryoyên Metirsîdar Eşkere Dike", content: "Rapora dawî ya avhewayê ku ji aliyê rêxistineke zanistî ya navneteweyî ve hat weşandin, nîşan dide ku germahiya global ji ya ku dihat payîn zûtir pêş dikeve. Rapor balê dikişîne ser zêdebûna leza helandina cemedan û dubarebûna bûyerên hewayê yên ekstrem, û diyar dike ku heke tedbîrên bilez neyên girtin, zirareke bêveger dikare li ser gerstêrkê çêbibe." },
+            { id: 'article-2', title: "Surprîzek Mezin di Lîga Şampiyonan de: Tîmek Ciwanan ber bi Serê Çiyê ve diçe!", content: "Pêşveçûnek nediyar di cîhana futbolê de çêbû. Tîmek ciwan a ji lîgên jêrîn di Lîga Şampiyonan de serfiraziyên xwe didomîne. Bi parastina xwe ya bi dîsîplîn û afirîneriya xwe di êrîşê de, ev tîm hemû otorîteyan şaş kir û gihîşt çaryek fînalê, bû surprîza herî mezin a tûrnûvayê. Rahênerê wan, serkeftina wan bi ruhê tîmê û xebata dijwar ve girê dide." },
+            { id: 'article-3', title: "Destpêka Festîvala Rêya Hevrîşimê ya Dîrokî", content: "Li bajarên ku li ser Rêya Hevrîşimê ya kevnar in, festîvalek ku çandan li hev dicivîne, tê organîzekirin. Bi dirûşma 'Cihê Hevdîtina Çandan', festîval bi konserên muzîka kevneşopî, pêşandanên dansê, atolyeyên hunerên destan û bûyerên gastronomîk pêşwaziya mêvanan dike. Armanca festîvalê avakirina piran di navbera çandên cihê de ye." },
+            { id: 'article-4', title: "Rêberên Cîhanê ji bo Lûtkeya Ewlehiya Xwarinê Li Hev Civiyan", content: "Rêberên ji çar aliyên cîhanê ji bo lûtkeyekê li hev civiyan da ku li ser krîza xwarinê ya zêde dibe û çandiniya domdar biaxifin. Mijarên sereke yên rojevê bandorên guherîna avhewa li ser çandiniyê, pirsgirêkên zincîra peydakirina xwarinê û baştirkirina gihîştina xwarinê li herêmên xizan in. Tê payîn ku ji bo çareserkirina van pirsgirêman nexşerêyek hevpar were amadekirin." },
+            { id: 'article-5', title: "Rapora Dawî ya Avhewayê Senaryoyên Metirsîdar Eşkere Dike", content: "Rapora dawî ya avhewayê ku ji aliyê rêxistineke zanistî ya navneteweyî ve hat weşandin, nîşan dide ku germahiya global ji ya ku dihat payîn zûtir pêş dikeve. Rapor balê dikişîne ser zêdebûna leza helandina cemedan û dubarebûna bûyerên hewayê yên ekstrem, û diyar dike ku heke tedbîrên bilez neyên girtin, zirareke bêveger dikare li ser gerstêrkê çêbibe." },
+            { id: 'article-6', title: "Pêla Germê Li Herêmê Rekorên Nû Şikand", content: "Pêla germê ya ku bandor li herêmê kir, rekora germahiya herî bilind a 50 salên dawî şikand. Rayedaran welatiyan, bi taybetî kesên pîr, zarokan û kesên bi nexweşiyên kronîk, hişyar kirin ku di demjimêrên herî germ ên rojê de dernekevin derve. Şewatên daristanan û kêmbûna berhemdariya hilberên çandiniyê jî di nav bandorên neyînî yên germê de ne." },
+            { id: 'article-7', title: "Pêngavek Girîng ji Zanyaran di Pêşxistina Vaksinan de", content: "Nûçeyek balkêş ji cîhana bijîşkiyê hat. Komek lêkolîner di prototîpa vaksînek ku li dijî nexweşiyek kêm pêş hatiye xistin de encamên erênî bi dest xistine. Ev vaksîna nû, ku di qonaxa ceribandinên klînîkî de ye, hêviyek mezin dide ji bo pêşîlêgirtina belavbûna nexweşiyê û xurtkirina pergala parastinê." },
+            { id: 'article-8', title: "Hunerên Ku Li Ber Winda Bûnê Ne, Ji Nû ve Zindî Dibin", content: "Hunerên kevneşopî yên ku li hemberî teknolojiya îroyîn bi zehmetiyê re rû bi rû ne, bi hewldanên hunermendên ciwan ji nû ve zindî dibin. Hunerên wekî tevnî, seramîk û neqşên darîn, bi atolyeyên û qursên ku têne organîzekirin, ji nifşên nû re têne veguhestin. Van hewldanan tevkariyeke girîng di parastina mîrateya çandî de dikin." }
+        ],
+        'az': [
+            { id: 'article-1', title: "Yazı Sistemlərinin Təkamülü: Bəşəriyyətin Ortaq Mirası", content: "Qədim dövrlərdən bu günə qədər yazı sistemləri bəşəriyyət tarixinin ən mühüm ixtiralarından biri olmuşdur. Şumerlərin mixi yazısından tutmuş Misirlilərin hiyeroqliflərinə, Finikiyalıların ilk əlifbasından müasir yazı sistemlərinə qədər hər bir mərhələ biliklərin toplanmasında və nəsildən-nəslə ötürülməsində həyati rol oynamışdır. Yazının ixtirası təkcə mədəni və elmi inkişafı sürətləndirmədi, həm də cəmiyyətlərin təşkilatlanma formalarına dərindən təsir etdi. Bu gün istifadə etdiyimiz hər bir hərf min illik təkamülün nəticəsidir." },
+            { id: 'article-2', title: "Çempionlar Liqasında Böyük Sürpriz: Gənclər Komandası Zirvəyə Yürüyür!", content: "Futbol dünyasında gözlənilməz bir inkişaf yaşandı. Aşağı liqalardan gələn gənc bir komanda Çempionlar Liqasında fırtına kimi əsməyə davam edir. Müdafiədəki intizamları ve hücumdakı yaradıcılıqları ilə bütün mütəxəssisləri təəccübləndirən bu komanda, dörddəbir finala yüksələrək turnirin ən böyük sürprizi oldu. Baş məşqçiləri, uğurlarının sirrini komanda ruhu ve zəhmətlə bağlayır." },
+            { id: 'article-3', title: "Tarixi İpək Yolu Festivalı Başladı", content: "Qədim İpək Yolu marşrutu üzərində yerləşən şəhərlərdə mədəniyyətləri bir araya gətirən bir festival keçirilir. 'Mədəniyyətlərin Kəsişməsi' mövzusu ilə təşkil edilən festivalda ənənəvi musiqi konsertləri, rəqs şouları, əl işləri emalatxanaları ve qastronomiya tədbirləri qonaqları qarşılayır. Festival müxtəlif sivilizasiyalar arasında körpülər qurmağı hədəfləyir." },
+            { id: 'article-4', title: "Qlobal Liderlər Qida Təhlükəsizliyi Sammiti üçün Bir Araya Gəldi", content: "Dünyanın hər yerindən liderlər, artan qida böhranını və dayanıqlı kənd təsərrüfatı məsələlərini müzakirə etmək üçün bir sammitdə bir araya gəldilər. Toplantının əsas gündəliyində iqlim dəyişikliyinin kənd təsərrüfatına təsirləri, təchizat zəncirindəki problemlər və yoxsul bölgələrdə qidaya çıxışın artırılması yer alır. Bu problemlərin həlli üçün ortaq bir yol xəritəsinin yaradılması gözlənilir." },
+            { id: 'article-5', title: "Son İqlim Hesabatı Narahatverici Senariyləri Ortaya Qoydu", content: "Beynəlxalq bir elmi təşkilat tərəfindən yayımlanan son iqlim hesabatı, qlobal istiləşmənin gözləniləndən daha sürətli irəlilədiyini göstərir. Hesabatda buzlaqların ərimə sürətinin artmasına ve ekstremal hava hadisələrinin sıxlığına diqqət çəkilərək, təcili tədbirlər görülmədiyi təqdirdə planetimiz üçün dönülməz zərərlərin yarana biləcəyi bildirilir." },
+            { id: 'article-6', title: "İsti Hava Dalgası, Bölgədə Yeni Rekordlar Qırdı", content: "Bölgəni əhatə edən isti hava dalğası, son 50 ilin ən yüksək temperatur rekordunu qırdı. Rəsmilər, xüsusilə yaşlı, uşaq ve xroniki xəstəliyi olan vətəndaşları günün ən isti saatlarında çölə çıxmamağa çağırdı. Meşə yanğınları ve kənd təsərrüfatı məhsullarının məhsuldarlığındakı azalma da istiliyin mənfi təsirləri arasındadır." },
+            { id: 'article-7', title: "Alimlərdən Vaksin Təkmilləşdirilməsində Mühüm Addım", content: "Tibb dünyasından həyəcan verən bir xəbər gəldi. Bir qrup tədqiqatçı, nadir görülən bir xəstəliyə qarşı inkişaf etdirilən vaksin prototipində müsbət nəticələr əldə etdi. Klinik sınaq mərhələsində olan bu yeni vaksin, xəstəliyin yayılmasının qarşısını almaqda ve immun sistemini gücləndirməkdə böyük ümid verir." },
+            { id: 'article-8', title: "Yox Olmağa Üz Tutan Sənətkarlıqlar Yenidən Canlanır", content: "Müasir texnologiya qarşısında çətinlik çəkən ənənəvi sənətkarlıqlar, gənc sənətkarların səyləri ilə yenidən həyata qayıdır. Toxuculuq, saxsı qab istehsalı ve ağac oyma sənəti kimi sənətlər, təşkil edilən emalatxanalar ve kurslar vasitəsilə yeni nəsillərə ötürülür. Bu səylər mədəni irsin qorunmasına mühüm töhfələr verir." }
+        ],
+        'ja': [
+            { id: 'article-1', title: "書記体系の進化：人類共通の遺産", content: "古代から現在に至るまで、書記体系は人類の歴史における最も重要な発明の一つでした。シュメール人の楔形文字からエジプト人の象形文字、フェニキア人の最初のアルファベットから現代の書記体系に至るまで、各段階は知識の蓄積と世代を超えた伝達において重要な役割を果たしてきました。文字の発明は、文化と科学の発展を加速させただけでなく、社会の組織形態にも深く影響を与えました。私たちが今日使っているすべての文字は、何千年にもわたる進化の結果です。" },
+            { id: 'article-2', title: "チャンピオンズリーグでの大番狂わせ：下部組織チームが頂点へ！", content: "サッカー界で予想外の展開がありました。下位リーグから来た若いチームが、チャンピオンズリーグで旋風を巻き起こし続けています。規律ある守備と攻撃における創造性で、このチームはすべての権威を驚かせ、準々決勝に進出し、大会最大のサプライズとなりました。彼らの監督は、成功の秘訣をチームスピリットとハードワークに帰しています。" },
+            { id: 'article-3', title: "歴史的なシルクロードフェスティバルが始まる", content: "古代シルクロードのルートに沿った都市で、文化を一つにまとめるフェスティバルが開催されます。「文化の交差点」をテーマにしたこのフェスティバルでは、伝統的な音楽コンサート、ダンスパフォーマンス、工芸ワークショップ、グルメイベントが来場者を楽しませます。このフェスティバルは、異なる文明間の橋渡しを目指しています。" },
+            { id: 'article-4', title: "世界の指導者が食料安全保障サミットのために集結", content: "世界中の指導者が、増大する食料危機と持続可能な農業について議論するためにサミットに集まりました。議題の主な項目には、気候変動が農業に与える影響、サプライチェーンの問題、貧しい地域での食料アクセスを改善することが含まれています。これらの問題の解決に向けた共通のロードマップが作成されると予想されています。" },
+            { id: 'article-5', title: "最新の気候報告が憂慮すべきシナリオを明らかに", content: "国際的な科学機関によって発表された最新の気候報告は、地球温暖化が予想よりも速く進行していることを示しています。報告書は、氷河の融解速度の増加と極端な気象現象の頻度に注目し、緊急の対策が取られなければ、地球に不可逆的な損害が発生する可能性があると述べています。" },
+            { id: 'article-6', title: "熱波が地域で新記録を樹立", content: "地域を襲った熱波は、過去50年間で最も高い気温記録を打ち立てました。当局は、特に高齢者、子供、慢性疾患を持つ市民に対し、日中の最も暑い時間帯に外出しないよう警告しました。森林火災や農作物の収穫量減少も、熱波のマイナスの影響に含まれます。" },
+            { id: 'article-7', title: "科学者からワクチン開発における重要な一歩", content: "医学界からワクワクするニュースが届きました。研究者グループは、稀な病気に対して開発されたワクチンのプロトタイプで肯定的な結果を得ました。臨床試験段階にあるこの新しいワクチンは、病気の蔓延を防ぎ、免疫システムを強化する上で大きな希望をもたらします。" },
+            { id: 'article-8', title: "忘れられかけた伝統工芸が再び息を吹き返す", content: "現代のテクノロジーに直面して苦境に立たされていた伝統工芸が、若い職人たちの努力によって再び生命を取り戻しています。織物、陶芸、木彫りなどの工芸品は、開催されるワークショップやコースを通じて新世代に伝えられています。これらの努力は、文化遺産の保護に重要な貢献をしています。" }
+        ],
+        'ko': [
+            { id: 'article-1', title: "문자 체계의 진화: 인류의 공동 유산", content: "고대부터 현재까지, 문자 체계는 인류 역사에서 가장 중요한 발명품 중 하나였습니다. 수메르인의 쐐기 문자부터 이집트인의 상형문자, 페니키아인의 첫 알파벳부터 현대의 문자 체계에 이르기까지, 각 단계는 지식의 축적과 세대 간 전달에 중요한 역할을 했습니다. 문자의 발명은 문화적, 과학적 발전을 가속화했을 뿐만 아니라, 사회의 조직 형태에도 깊이 영향을 미쳤습니다. 오늘날 우리가 사용하는 모든 문자는 수천 년에 걸친 진화의 결과입니다." },
+            { id: 'article-2', title: "챔피언스 리그의 대이변: 유스 팀이 정상으로 향하다!", content: "축구계에 예상치 못한 일이 벌어졌습니다. 하위 리그에서 온 젊은 팀이 챔피언스 리그에서 돌풍을 일으키고 있습니다. 규율 있는 수비와 공격에서의 창의성으로 모든 전문가들을 놀라게 한 이 팀은 8강에 진출하며 토너먼트의 가장 큰 이변이 되었습니다. 그들의 감독은 성공의 비결을 팀 정신과 꾸준한 노력에 돌리고 있습니다." },
+            { id: 'article-3', title: "역사적인 실크로드 축제 시작", content: "고대 실크로드 경로를 따라 위치한 도시들에서 문화를 하나로 모으는 축제가 개최됩니다. '문화의 교차로'라는 주제로 열리는 이 축제는 전통 음악 콘서트, 춤 공연, 수공예 워크숍 및 미식 행사로 방문객을 맞이합니다. 축제는 다른 문명 간의 다리를 놓는 것을 목표로 합니다." },
+            { id: 'article-4', title: "글로벌 리더들, 식량 안보 정상 회담 위해 모여", content: "전 세계의 리더들이 증가하는 식량 위기와 지속 가능한 농업에 대해 논의하기 위해 정상 회담에 모였습니다. 회의의 주요 의제에는 기후 변화가 농업에 미치는 영향, 공급망 문제, 그리고 빈곤 지역의 식량 접근성 향상이 포함됩니다. 이 문제들을 해결하기 위한 공동의 로드맵이 만들어질 것으로 예상됩니다." },
+            { id: 'article-5', title: "최신 기후 보고서, 우려스러운 시나리오를 드러내다", content: "국제 과학 기관이 발표한 최신 기후 보고서는 지구 온난화가 예상보다 빠르게 진행되고 있음을 보여줍니다. 보고서는 빙하의 융해 속도 증가와 극한 기상 현상의 빈도에 주목하며, 긴급 조치가 취해지지 않으면 지구에 돌이킬 수 없는 손상이 발생할 수 있다고 밝혔습니다." },
+            { id: 'article-6', title: "폭염, 지역에서 새로운 기록 경신", content: "지역을 덮친 폭염은 지난 50년 동안 가장 높은 기온 기록을 경신했습니다. 당국은 특히 노인, 어린이 및 만성 질환이 있는 시민들에게 하루 중 가장 더운 시간에는 외출하지 말 것을 경고했습니다. 산불과 농작물 수확량 감소 또한 폭염의 부정적인 영향 중 하나입니다." },
+            { id: 'article-7', title: "과학자들, 백신 개발에 중요한 진전", content: "의학계에서 흥미로운 소식이 전해졌습니다. 한 연구팀이 희귀 질병에 대해 개발된 백신 프로토타입에서 긍정적인 결과를 얻었습니다. 임상 시험 단계에 있는 이 새로운 백신은 질병 확산을 막고 면역 체계를 강화하는 데 큰 희망을 제시합니다." },
+            { id: 'article-8', title: "잊혀져가는 전통 공예, 다시 살아나다", content: "현대 기술에 직면하여 어려움을 겪고 있는 전통 공예들이 젊은 장인들의 노력으로 다시 살아나고 있습니다. 직조, 도자기 제작 및 목공예와 같은 공예들은 워크숍과 강좌를 통해 새로운 세대에게 전달되고 있습니다. 이러한 노력은 문화유산 보존에 중요한 기여를 합니다." }
+        ],
+        'zh': [
+            { id: 'article-1', title: "书写系统的演变：人类的共同遗产", content: "从古代到今天，书写系统一直是人类历史上最重要的发明之一。从苏美尔人的楔形文字到埃及人的象形文字，从腓尼基人的第一个字母表到现代书写系统，每一个阶段都在知识的积累和代际传承中发挥了至关重要的作用。文字的发明不仅加速了文化和科学的发展，也深刻影响了社会的组织形式。我们今天使用的每一个字母，都是数千年演变的结果。" },
+            { id: 'article-2', title: "欧冠大冷门：青年队挺进巅峰！", content: "足球界发生了一件意想不到的事情。一支来自低级别联赛的年轻球队，在欧洲冠军联赛中持续掀起波澜。凭借着严明的防守纪律和进攻端的创造力，这支球队震惊了所有权威人士，成功晋级四分之一决赛，成为本届赛事最大的惊喜。他们的主教练将成功归因于团队精神和不懈的努力。" },
+            { id: 'article-3', title: "历史悠久的丝绸之路节开幕", content: "一场汇聚文化的节日正在古丝绸之路沿线的城市举行。以“文化的交汇点”为主题，该节日通过传统的音乐会、舞蹈表演、手工艺作坊和美食活动来迎接游客。节日的宗旨是建立不同文明之间的桥梁。" },
+            { id: 'article-4', title: "全球领导人齐聚粮食安全峰会", content: "来自世界各地的领导人齐聚一堂，举行峰会，讨论日益严重的粮食危机和可持续农业问题。会议的主要议题包括气候变化对农业的影响、供应链问题以及改善贫困地区的粮食获取。预计将制定一个共同的路线图来解决这些问题。" },
+            { id: 'article-5', title: "最新气候报告揭示令人担忧的情景", content: "国际科学组织发布的最新气候报告显示，全球变暖的进展比预期要快。报告指出冰川融化速度加快和极端天气事件频率增加，并表示如果不采取紧急措施，地球可能会遭受不可逆转的损害。" },
+            { id: 'article-6', title: "热浪在该地区创下新纪录", content: "一场席卷该地区的热浪打破了过去50年来的最高气温纪录。当局警告市民，特别是老年人、儿童和患有慢性疾病的人，在一天中最热的时候不要外出。森林火灾和农作物产量下降也是热浪的负面影响之一。" },
+            { id: 'article-7', title: "科学家在疫苗开发方面迈出重要一步", content: "医学界传来振奋人心的消息。一个研究小组在针对罕见疾病开发的疫苗原型中取得了积极成果。这种新疫苗目前处于临床试验阶段，在预防疾病传播和增强免疫系统方面具有巨大潜力。" },
+            { id: 'article-8', title: "濒临失传的传统手工艺重新焕发生机", content: "面对现代技术而举步维艰的传统手工艺品，在年轻工匠们的努力下重获新生。通过举办的作坊和课程，编织、陶艺和木雕等技艺被传承给新一代。这些努力为保护文化遗产做出了重要贡献。" }
+        ],
+        'pt': [
+            { id: 'article-1', title: "A Evolução dos Sistemas de Escrita: Um Patrimônio Comum da Humanidade", content: "Desde os tempos antigos até hoje, os sistemas de escrita foram uma das invenções mais importantes da história da humanidade. Da escrita cuneiforme dos sumérios aos hieróglifos dos egípcios, do primeiro alfabeto dos fenícios aos sistemas de escrita modernos, cada etapa desempenhou um papel vital na acumulação e transmissão do conhecimento de geração em geração. A invenção da escrita não apenas acelerou o desenvolvimento cultural e científico, mas também influenciou profundamente as formas de organização das sociedades. Cada letra que usamos hoje é o resultado de milhares de anos de evolução." },
+            { id: 'article-2', title: "Grande Surpresa na Liga dos Campeões: Time de Base Avança para o Topo!", content: "Um desenvolvimento inesperado ocorreu no mundo do futebol. Um jovem time das ligas inferiores continua a fazer barulho na Liga dos Campeões. Com sua defesa disciplinada e criatividade no ataque, esta equipe surpreendeu todas as autoridades e alcançou as quartas de final, tornando-se a maior surpresa do torneio. Seu técnico atribui o sucesso ao espírito de equipe e ao trabalho duro." },
+            { id: 'article-3', title: "Início do Histórico Festival da Rota da Seda", content: "Um festival que reúne culturas está sendo realizado em cidades localizadas ao longo da antiga Rota da Seda. Com o tema 'O Cruzamento das Culturas', o festival recebe visitantes com concertos de música tradicional, apresentações de dança, oficinas de artesanato e eventos gastronômicos. O festival tem como objetivo construir pontes entre diferentes civilizações." },
+            { id: 'article-4', title: "Líderes Globais se Reúnem para a Cúpula de Segurança Alimentar", content: "Líderes de todo o mundo se reuniram em uma cúpula para discutir a crescente crise alimentar e a agricultura sustentável. Os principais pontos da agenda incluem os impactos da mudança climática na agricultura, problemas na cadeia de suprimentos e a melhoria do acesso a alimentos em regiões pobres. Espera-se que um roteiro comum seja criado para resolver esses problemas." },
+            { id: 'article-5', title: "Último Relatório Climático Revela Cenários Preocupantes", content: "O último relatório climático, publicado por uma organização científica internacional, mostra que o aquecimento global está progredindo mais rápido do que o esperado. O relatório aponta para o aumento da velocidade do derretimento das geleiras e a frequência de eventos climáticos extremos, declarando que danos irreversíveis podem ocorrer no planeta se medidas urgentes não forem tomadas." },
+            { id: 'article-6', title: "Onda de Calor Bate Novos Recordes na Região", content: "Uma onda de calor que atingiu a região quebrou o recorde de temperatura mais alta dos últimos 50 anos. As autoridades alertaram os cidadãos, especialmente os idosos, crianças e pessoas com doenças crônicas, para não saírem durante as horas mais quentes do dia. Incêndios florestais e a queda na produtividade das culturas agrícolas também estão entre os efeitos negativos do calor." },
+            { id: 'article-7', title: "Passo Importante de Cientistas no Desenvolvimento de Vacinas", content: "Uma notícia empolgante veio do mundo da medicina. Um grupo de pesquisadores obteve resultados positivos em um protótipo de vacina desenvolvido contra uma doença rara. Esta nova vacina, que está em fase de testes clínicos, promete muito para prevenir a disseminação da doença e fortalecer o sistema imunológico." },
+            { id: 'article-8', title: "Artesanatos em Extinção Renascem", content: "Os artesanatos tradicionais que enfrentam dificuldades diante da tecnologia de hoje estão sendo revividos graças aos esforços de jovens artesãos. Artes como tecelagem, cerâmica e entalhe em madeira são transmitidas às novas gerações através de oficinas e cursos. Esses esforços contribuem significativamente para a preservação do patrimônio cultural." }
+        ],
+        'es': [
+            { id: 'article-1', title: "La Evolución de los Sistemas de Escritura: Un Patrimonio Común de la Humanidad", content: "Desde la antigüedad hasta hoy, los sistemas de escritura han sido una de las invenciones más importantes de la historia de la humanidad. Desde la escritura cuneiforme de los sumerios hasta los jeroglíficos de los egipcios, desde el primer alfabeto de los fenicios hasta los sistemas de escritura modernos, cada etapa ha jugado un papel vital en la acumulación y transmisión del conocimiento de generación en generación. La invención de la escritura no solo aceleró el desarrollo cultural y científico, sino que también influyó profundamente en las formas de organización de las sociedades. Cada letra que usamos hoy es el resultado de miles de años de evolución." },
+            { id: 'article-2', title: "Gran Sorpresa en la Liga de Campeones: ¡Un Equipo Juvenil se Abre Paso Hacia la Cima!", content: "Un desarrollo inesperado ha ocurrido en el mundo del fútbol. Un equipo joven de ligas inferiores continúa causando sensación en la Liga de Campeones. Con su defensa disciplinada y creatividad en el ataque, este equipo sorprendió a todas las autoridades y alcanzó los cuartos de final, convirtiéndose en la mayor sorpresa del torneo. Su entrenador atribuye el éxito al espíritu de equipo y al trabajo duro." },
+            { id: 'article-3', title: "Comienza el Histórico Festival de la Ruta de la Seda", content: "Un festival que une culturas se está organizando en ciudades ubicadas a lo largo de la antigua Ruta de la Seda. Con el tema 'El Cruce de Culturas', el festival recibe a los visitantes con conciertos de música tradicional, espectáculos de danza, talleres de artesanía y eventos gastronómicos. El festival tiene como objetivo construir puentes entre diferentes civilizaciones." },
+            { id: 'article-4', title: "Líderes Globales se Reunieron para la Cumbre de Seguridad Alimentaria", content: "Líderes de todo el mundo se reunieron en una cumbre para discutir la creciente crisis alimentaria y la agricultura sostenible. Los principales puntos de la agenda incluyen los impactos del cambio climático en la agricultura, los problemas de la cadena de suministro y la mejora del acceso a los alimentos en regiones pobres. Se espera que se cree una hoja de ruta común para resolver estos problemas." },
+            { id: 'article-5', title: "El Último Informe Climático Revela Escenarios Preocupantes", content: "El último informe climático, publicado por una organización científica internacional, muestra que el calentamiento global está progresando más rápido de lo esperado. El informe señala el aumento en la velocidad del derretimiento de los glaciares y la frecuencia de los eventos climáticos extremos, y afirma que se podría causar un daño irreversible al planeta si no se toman medidas urgentes." },
+            { id: 'article-6', title: "Ola de Calor Rompe Nuevos Récords en la Región", content: "Una ola de calor que azotó la región rompió el récord de temperatura más alta de los últimos 50 años. Las autoridades advirtieron a los ciudadanos, especialmente a los ancianos, niños y personas con enfermedades crónicas, que no salgan durante las horas más calurosas del día. Los incendios forestales y la disminución de la productividad de los cultivos agrícolas también se encuentran entre los efectos negativos del calor." },
+            { id: 'article-7', title: "Paso Importante de los Científicos en el Desarrollo de Vacunas", content: "Una noticia emocionante ha llegado del mundo de la medicina. Un grupo de investigadores ha obtenido resultados positivos en un prototipo de vacuna desarrollado contra una enfermedad rara. Esta nueva vacuna, que se encuentra en fase de ensayos clínicos, promete mucho para prevenir la propagación de la enfermedad y fortalecer el sistema inmunológico." },
+            { id: 'article-8', title: "Las Artesanías en Peligro de Extinción Renacen", content: "Las artesanías tradicionales que enfrentan dificultades frente a la tecnología de hoy están reviviendo gracias a los esfuerzos de jóvenes artesanos. Artes como el tejido, la cerámica y la talla en madera se transmiten a las nuevas generaciones a través de talleres y cursos. Estos esfuerzos contribuyen significativamente a la preservación del patrimonio cultural." }
+        ],
+        'hi': [
+            { id: 'article-1', title: "लेखन प्रणालियों का विकास: मानवता की एक साझा विरासत", content: "प्राचीन काल से आज तक, लेखन प्रणालियाँ मानव इतिहास के सबसे महत्वपूर्ण आविष्कारों में से एक रही हैं। सुमेरियन की कीलाक्षर लिपि से मिस्रियों के चित्रलिपि तक, और फोनीशियाई के पहले वर्णमाला से आधुनिक लेखन प्रणालियों तक, हर चरण ने ज्ञान के संचय और पीढ़ी-दर-पीढ़ी हस्तांतरण में एक महत्वपूर्ण भूमिका निभाई है। लेखन के आविष्कार ने न केवल सांस्कृतिक और वैज्ञानिक विकास को गति दी, बल्कि समाजों के संगठन के तरीकों को भी गहराई से प्रभावित किया। आज हम जो भी अक्षर इस्तेमाल करते हैं, वह हजारों वर्षों के विकास का परिणाम है।" },
+            { id: 'article-2', title: "चैंपियंस लीग में बड़ा उलटफेर: युवा टीम शीर्ष पर बढ़ रही है!", content: "फुटबॉल की दुनिया में एक अप्रत्याशित विकास हुआ है। निचली लीगों से आई एक युवा टीम चैंपियंस लीग में तूफान मचाती जा रही है। अपनी अनुशासित रक्षा और आक्रमण में रचनात्मकता के साथ, इस टीम ने सभी विशेषज्ञों को चौंका दिया और क्वार्टर फाइनल में पहुँच गई, जो टूर्नामेंट का सबसे बड़ा आश्चर्य बन गया। उनके कोच अपनी सफलता का श्रेय टीम भावना और कड़ी मेहनत को देते हैं।" },
+            { id: 'article-3', title: "ऐतिहासिक सिल्क रोड फेस्टिवल शुरू हुआ", content: "प्राचीन सिल्क रोड मार्ग पर स्थित शहरों में संस्कृतियों को एक साथ लाने वाला एक त्योहार आयोजित किया जा रहा है। 'संस्कृतियों का संगम' विषय के साथ आयोजित इस त्योहार में, पारंपरिक संगीत समारोहों, नृत्य प्रदर्शनों, हस्तशिल्प कार्यशालाओं और गैस्ट्रोनॉमी कार्यक्रमों के साथ आगंतुकों का स्वागत किया जाता है। त्योहार का उद्देश्य विभिन्न सभ्यताओं के बीच पुल बनाना है।" },
+            { id: 'article-4', title: "खाद्य सुरक्षा शिखर सम्मेलन के लिए वैश्विक नेता एक साथ आए", content: "दुनिया भर के नेता बढ़ते खाद्य संकट और टिकाऊ कृषि पर चर्चा करने के लिए एक शिखर सम्मेलन में एकत्रित हुए। बैठक के मुख्य एजेंडे में जलवायु परिवर्तन के कृषि पर प्रभाव, आपूर्ति श्रृंखला की समस्याएं, और गरीब क्षेत्रों में भोजन तक पहुंच में सुधार शामिल हैं। इन समस्याओं को हल करने के लिए एक साझा रोडमैप बनाने की उम्मीद है।" },
+            { id: 'article-5', title: "नवीनतम जलवायु रिपोर्ट ने चिंताजनक परिदृश्य उजागर किए", content: "एक अंतरराष्ट्रीय वैज्ञानिक संगठन द्वारा प्रकाशित नवीनतम जलवायु रिपोर्ट से पता चलता है कि ग्लोबल वार्मिंग उम्मीद से ज्यादा तेजी से बढ़ रही है। रिपोर्ट में ग्लेशियरों के पिघलने की गति में वृद्धि और चरम मौसम की घटनाओं की आवृत्ति पर ध्यान आकर्षित किया गया है, और कहा गया है कि यदि तत्काल उपाय नहीं किए गए तो हमारे ग्रह को अपरिवर्तनीय क्षति हो सकती है।" },
+            { id: 'article-6', title: "गर्मी की लहर ने क्षेत्र में नए रिकॉर्ड तोड़े", content: "क्षेत्र को प्रभावित करने वाली गर्मी की लहर ने पिछले 50 वर्षों का उच्चतम तापमान रिकॉर्ड तोड़ दिया। अधिकारियों ने नागरिकों, विशेष रूप से बुजुर्गों, बच्चों और पुरानी बीमारियों से ग्रस्त लोगों को दिन के सबसे गर्म घंटों के दौरान बाहर न निकलने की चेतावनी दी। जंगल की आग और कृषि उत्पादों की उपज में गिरावट भी गर्मी के नकारात्मक प्रभावों में शामिल हैं।" },
+            { id: 'article-7', title: "वैज्ञानिकों द्वारा वैक्सीन विकास में महत्वपूर्ण कदम", content: "चिकित्सा जगत से एक रोमांचक खबर आई है। शोधकर्ताओं के एक समूह ने एक दुर्लभ बीमारी के खिलाफ विकसित एक वैक्सीन प्रोटोटाइप में सकारात्मक परिणाम प्राप्त किए हैं। यह नया वैक्सीन, जो नैदानिक ​​परीक्षण चरण में है, बीमारी के प्रसार को रोकने और प्रतिरक्षा प्रणाली को मजबूत करने में बड़ी उम्मीद जगाता है।" },
+            { id: 'article-8', title: "लुप्त हो रहे शिल्प फिर से जीवित हो रहे हैं", content: "आज की तकनीक के सामने संघर्ष कर रहे पारंपरिक शिल्प, युवा कारीगरों के प्रयासों से फिर से जीवन में आ रहे हैं। बुनाई, मिट्टी के बर्तनों और लकड़ी की नक्काशी जैसे शिल्प आयोजित कार्यशालाओं और पाठ्यक्रमों के माध्यम से नई पीढ़ियों को हस्तांतरित किए जा रहे हैं। ये प्रयास सांस्कृतिक विरासत के संरक्षण में महत्वपूर्ण योगदान देते हैं।" }
+        ],
+    };
+
+    // Gazete başlıklarının dilden dile çevirileri
+    const translatedTitles = {
+        'tr': 'Dijital Alfabe Gazetesi',
+        'el': 'Ψηφιακή Εφημερίδα Αλφαβήτου',
+        'de': 'Digitale Alphabet-Zeitung',
+        'fr': 'Journal de l\'alphabet numérique',
+        'he': 'עיתון האלפבית הדיגיטלי',
+        'ar': 'جريدة الأبجدية الرقمية',
+        'ku': 'Rojnameya Alfabe ya Dîjîtal',
+        'az': 'Rəqəmsal Əlifba Qəzeti',
+        'ja': 'デジタルアルファベット新聞',
+        'ko': '디지털 알파벳 신문',
+        'zh': '数字字母报',
+        'pt': 'Jornal Digital do Alfabeto',
+        'es': 'Periódico Digital del Alfabeto',
+        'hi': 'डिजिटल वर्णमाला समाचार पत्र'
+    };
+    
+    // Hikaye bölümü başlık ve metin çevirileri
+    const storySectionTranslations = {
+        'tr': { title: "Senin Hikayeni Paylaş", description: "Yaşadığın ilginç bir olayı, bir düşünceni veya bir hikayeni burada paylaşabilirsin. Senin hikayen de gazetenin bir parçası olacak!", authorPlaceholder: "Adınız (isteğe bağlı)", contentPlaceholder: "Hikayeni buraya yaz...", submitButton: "Hikayemi Gönder" },
+        'el': { title: "Μοιραστείτε την Ιστορία σας", description: "Μπορείτε να μοιραστείτε εδώ μια ενδιαφέρουσα εμπειρία, μια σκέψη ή μια ιστορία. Η ιστορία σας θα γίνει επίσης μέρος της εφημερίδας!", authorPlaceholder: "Το όνομά σας (προαιρετικό)", contentPlaceholder: "Γράψτε την ιστορία σας εδώ...", submitButton: "Αποστολή Ιστορίας" },
+        'de': { title: "Teilen Sie Ihre Geschichte", description: "Sie können hier eine interessante Erfahrung, einen Gedanken oder eine Geschichte teilen. Ihre Geschichte wird ebenfalls Teil der Zeitung sein!", authorPlaceholder: "Ihr Name (optional)", contentPlaceholder: "Schreiben Sie Ihre Geschichte hier...", submitButton: "Geschichte senden" },
+        'fr': { title: "Partagez Votre Histoire", description: "Vous pouvez partager ici une expérience intéressante, une pensée ou une histoire. Votre histoire fera également partie du journal !", authorPlaceholder: "Votre nom (facultatif)", contentPlaceholder: "Écrivez votre histoire ici...", submitButton: "Envoyer mon histoire" },
+        'he': { title: "שתף את הסיפור שלך", description: "אתה יכול לשתף כאן חוויה מעניינת, מחשבה או סיפור. הסיפור שלך יהיה גם חלק מהעיתון!", authorPlaceholder: "שמך (אופציונלי)", contentPlaceholder: "כתוב את הסיפור שלך כאן...", submitButton: "שלח את הסיפור שלי" },
+        'ar': { title: "شارك قصتك", description: "يمكنك مشاركة تجربة مثيرة للاهتمام أو فكرة أو قصة هنا. ستكون قصتك جزءًا من الجريدة أيضًا!", authorPlaceholder: "اسمك (اختياري)", contentPlaceholder: "اكتب قصتك هنا...", submitButton: "إرسال قصتي" },
+        'ku': { title: "Çîroka Xwe Parve Bikin", description: "Hûn dikarin ezmûnek balkêş, ramanek, an çîrokek li vir parve bikin. Çîroka we jî dê bibe beşek ji rojnameyê!", authorPlaceholder: "Navê we (bijarte)", contentPlaceholder: "Çîroka xwe li vir binivîsin...", submitButton: "Çîroka Min Bişînin" },
+        'az': { title: "Hekayənizi Paylaşın", description: "Maraqlı bir təcrübə, bir fikir və ya hekayəni burada paylaşa bilərsiniz. Sizin hekayəniz də qəzetin bir hissəsi olacaq!", authorPlaceholder: "Adınız (isteğe bağlı)", contentPlaceholder: "Hekayənizi buraya yazın...", submitButton: "Hekayəmi Göndər" },
+        'ja': { title: "あなたの物語を共有する", description: "面白い経験、考え、または物語をここで共有できます。あなたの物語も新聞の一部になります！", authorPlaceholder: "あなたの名前（任意）", contentPlaceholder: "あなたの物語をここに書いてください...", submitButton: "物語を送信" },
+        'ko': { title: "당신의 이야기 공유하기", description: "흥미로운 경험, 생각 또는 이야기를 여기에 공유할 수 있습니다. 당신의 이야기도 신문의 일부가 될 것입니다!", authorPlaceholder: "당신의 이름 (선택 사항)", contentPlaceholder: "여기에 당신의 이야기를 쓰세요...", submitButton: "내 이야기 보내기" },
+        'zh': { title: "分享你的故事", description: "你可以在这里分享一个有趣的经历、一个想法或一个故事。你的故事也将成为报纸的一部分！", authorPlaceholder: "你的名字（可选）", contentPlaceholder: "在这里写下你的故事...", submitButton: "提交我的故事" },
+        'pt': { title: "Compartilhe Sua História", description: "Você pode compartilhar uma experiência interessante, um pensamento ou uma história aqui. Sua história também fará parte do jornal!", authorPlaceholder: "Seu nome (opcional)", contentPlaceholder: "Escreva sua história aqui...", submitButton: "Enviar Minha História" },
+        'es': { title: "Comparte Tu Historia", description: "Puedes compartir una experiencia interesante, un pensamiento o una historia aquí. ¡Tu historia también formará parte del periódico!", authorPlaceholder: "Tu nombre (opcional)", contentPlaceholder: "Escribe tu historia aquí...", submitButton: "Enviar Mi Historia" },
+        'hi': { title: "अपनी कहानी साझा करें", description: "आप यहाँ एक दिलचस्प अनुभव, एक विचार, या एक कहानी साझा कर सकते हैं। आपकी कहानी भी अखबार का हिस्सा बन जाएगी!", authorPlaceholder: "आपका नाम (वैकल्पिक)", contentPlaceholder: "अपनी कहानी यहाँ लिखें...", submitButton: "मेरी कहानी भेजें" }
+    };
+
+
+    // Alfabeler ve ilişkili dilleri
+    const alphabets = [
+        { name: "Türkçe", lang: "tr", fontClass: "font-turkish" },
+        { name: "Yunanca", lang: "el", fontClass: "font-greek" },
+        { name: "Almanca", lang: "de", fontClass: "font-merriweather" },
+        { name: "Fransızca", lang: "fr", fontClass: "font-merriweather" },
+        { name: "İbranice", lang: "he", fontClass: "font-hebrew" },
+        { name: "Arapça", lang: "ar", fontClass: "font-arabic" },
+        { name: "Kürtçe", lang: "ku", fontClass: "font-noto-sans" },
+        { name: "Azerice", lang: "az", fontClass: "font-merriweather" },
+        { name: "Japonca", lang: "ja", fontClass: "font-japanese" },
+        { name: "Korece", lang: "ko", fontClass: "font-korean" },
+        { name: "Çince", lang: "zh", fontClass: "font-chinese" },
+        { name: "Portekizce", lang: "pt", fontClass: "font-merriweather" },
+        { name: "İspanyolca", lang: "es", fontClass: "font-merriweather" },
+        { name: "Hintçe", lang: "hi", fontClass: "font-hindi" }
+    ];
+
+    const mainContent = document.getElementById('main-content');
+    const navContainer = document.querySelector('.alphabet-nav');
+    const body = document.body;
+    const resetButton = document.getElementById('reset-font-btn');
+    const newspaperTitle = document.getElementById('newspaper-title');
+
+    // Yeni hikaye bölümü elementleri
+    const storySectionTitle = document.getElementById('story-section-title');
+    const storySectionDescription = document.getElementById('story-section-description');
+    const storyAuthorInput = document.getElementById('story-author');
+    const storyContentTextarea = document.getElementById('story-content');
+    const submitButton = document.getElementById('submit-button');
+
+    // Başlangıçta Türkçe makaleleri oluştur
+    document.addEventListener('DOMContentLoaded', () => {
+        renderArticles('tr');
+        renderAlphabetButtons();
+        updateStorySection('tr'); // Başlangıçta Türkçe hikaye bölümünü ayarla
+    });
+
+    // Makale kartlarını oluşturan ve ekleyen fonksiyon
+    function renderArticles(lang) {
+        mainContent.innerHTML = ''; // Önceki makaleleri temizle
+        const articles = content[lang] || content['tr']; // Dili bulamazsa Türkçe'ye dön
+        
+        // Başlığı çevir
+        newspaperTitle.textContent = translatedTitles[lang] || translatedTitles['tr'];
+        
+        articles.forEach(article => {
+            const articleCard = document.createElement('div');
+            articleCard.classList.add('article-card', 'p-6', 'bg-gray-50', 'rounded-lg', 'shadow-sm');
+            
+            const title = document.createElement('h2');
+            title.classList.add('article-title', 'text-gray-900');
+            title.textContent = article.title;
+            
+            const contentParagraph = document.createElement('p');
+            contentParagraph.classList.add('article-content', 'text-gray-600', 'mt-2');
+            contentParagraph.textContent = article.content;
+            
+            articleCard.appendChild(title);
+            articleCard.appendChild(contentParagraph);
+            mainContent.appendChild(articleCard);
+        });
+    }
+
+    // Hikaye bölümü metinlerini güncelleyen fonksiyon
+    function updateStorySection(lang) {
+        const translations = storySectionTranslations[lang] || storySectionTranslations['tr'];
+        storySectionTitle.textContent = translations.title;
+        storySectionDescription.textContent = translations.description;
+        storyAuthorInput.placeholder = translations.authorPlaceholder;
+        storyContentTextarea.placeholder = translations.contentPlaceholder;
+        submitButton.textContent = translations.submitButton;
+    }
+
+    // Alfabe butonlarını oluşturan fonksiyon
+    function renderAlphabetButtons() {
+        navContainer.innerHTML = '';
+        alphabets.forEach(alphabet => {
+            const button = document.createElement('span');
+            button.classList.add('alphabet-nav-item');
+            button.textContent = alphabet.name;
+            button.dataset.lang = alphabet.lang;
+
+            button.addEventListener('click', () => {
+                renderArticles(alphabet.lang);
+                updateStorySection(alphabet.lang); // Hikaye bölümünü de çevir
+                // Body'deki önceki tüm font sınıflarını temizle
+                body.classList.remove('font-turkish', 'font-greek', 'font-hebrew', 'font-arabic', 'font-noto-sans', 'font-merriweather', 'font-japanese', 'font-korean', 'font-chinese', 'font-hindi');
+                if (alphabet.lang === 'ja') {
+                    body.style.fontFamily = "'Noto Sans JP', sans-serif";
+                } else if (alphabet.lang === 'ko') {
+                    body.style.fontFamily = "'Noto Serif KR', serif";
+                } else if (alphabet.lang === 'zh') {
+                    body.style.fontFamily = "'Noto Sans SC', sans-serif";
+                } else if (alphabet.lang === 'hi') {
+                    body.style.fontFamily = "'Noto Serif Devanagari', serif";
+                } else if (alphabet.lang === 'he') {
+                    body.style.fontFamily = "'Noto Serif Hebrew', serif";
+                } else if (alphabet.lang === 'ar') {
+                    body.style.fontFamily = "'Noto Naskh Arabic', serif";
+                } else {
+                    body.style.fontFamily = "'Merriweather', serif";
+                }
+            });
+            navContainer.appendChild(button);
+        });
+    }
+
+    // Türkçe'ye dönme butonu için olay dinleyicisi
+    resetButton.addEventListener('click', () => {
+        renderArticles('tr');
+        updateStorySection('tr'); // Türkçe'ye dönme butonu hikaye bölümünü de çevirir
+        body.style.fontFamily = "'Merriweather', serif";
+    });
+
+    // Hikaye gönderme formu için olay dinleyicisi
+    const storyForm = document.getElementById('story-form');
+    storyForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const author = document.getElementById('story-author').value || 'Anonim Okuyucu';
+        const storyContent = document.getElementById('story-content').value;
+
+        if (storyContent.trim() !== '') {
+            const newStoryCard = document.createElement('div');
+            newStoryCard.classList.add('article-card', 'p-6', 'bg-gray-50', 'rounded-lg', 'shadow-sm');
+            
+            const storyTitle = document.createElement('h2');
+            storyTitle.classList.add('article-title', 'text-gray-900');
+            storyTitle.textContent = 'Okuyucu Hikayesi: ' + author;
+            
+            const storyParagraph = document.createElement('p');
+            storyParagraph.classList.add('article-content', 'text-gray-600', 'mt-2');
+            storyParagraph.textContent = storyContent;
+            
+            newStoryCard.appendChild(storyTitle);
+            newStoryCard.appendChild(storyParagraph);
+            
+            // Yeni hikayeyi en üste ekle
+            mainContent.prepend(newStoryCard);
+            
+            // Formu temizle
+            document.getElementById('story-author').value = '';
+            document.getElementById('story-content').value = '';
+        }
+    });
+</script>
+
+</body>
+</html>
