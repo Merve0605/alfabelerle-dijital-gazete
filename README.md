@@ -1,1 +1,2 @@
 # Alfabelerle dijital gazete
+Dijital Alfabe Gazetesi, JavaScript tabanlı dinamik yapısı sayesinde kullanıcıların farklı diller ve alfabeler (Türkçe, Yunanca, Almanca, Fransızca vb.) arasında anında geçiş yapmasını sağlayan, seçilen dile uygun Google Fonts tipografilerini ekrana yansıtan ve masaüstünden mobile kadar duyarlı (responsive) 3 sütunlu geleneksel gazete düzenini sunan etkileşimli bir web sitesidir; ayrıca tek tıkla ana dile dönüş imkanı sunarken okuyucuların kendi yazılarını paylaşabileceği bir etkileşim formu da barındırır.
